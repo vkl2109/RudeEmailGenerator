@@ -8,6 +8,7 @@ import {
 import {
   LandingPage,
   ErrorPage,
+  RudeEmailPage
 } from './routes'
 
 const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
         index: true,
         element: <LandingPage />
       },
+      {
+        path: 'rude',
+        element: <RudeEmailPage />
+      }
     ]
   }
 ])

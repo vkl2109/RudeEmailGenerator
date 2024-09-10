@@ -10,7 +10,7 @@ import {
     Title
 } from "@mantine/core";
 import { IconBolt, IconFreeRights, IconMoodSmile, IconShield } from "@tabler/icons-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const icons = [
     {
@@ -26,7 +26,7 @@ const icons = [
     {
         icon: IconMoodSmile,
         title: 'Satisfaction Guaranteed',
-        body: "If you're not rudely satisfied, we'll rudely refund you"
+        body: "If you're not satisfied, we'll rudely refund you"
     },
     {
         icon: IconFreeRights,
@@ -40,19 +40,24 @@ export function LandingPage () {
 
     const [ email, setEmail ] = useState('')
 
+    const checkEmail = useMemo(() => {
+        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
+        return emailRegex.test(email);
+    }, [email]);
+
     return(
-        <Stack gap={0}>
+        <Stack gap={0} w="100%">
             <Stack
                 w="100%"
                 bg="black"
                 justify="center"
                 align="center"
                 p="xl"
-                h={rem(300)}
                 m={0}
                 >
                 <Title
                     c="white"
+                    ta="center"
                     >
                     Generate Rudely Effective Emails
                 </Title>
@@ -66,6 +71,8 @@ export function LandingPage () {
                 </Text>
                 <Button
                     size="md"
+                    component="a"
+                    href="/rude"
                     >
                     Get Rude Now
                 </Button>
@@ -84,6 +91,7 @@ export function LandingPage () {
                             shadow="md"
                             w={rem(400)}
                             h={rem(250)}
+                            maw='90%'
                             radius="xl"
                             >
                             <Stack 
@@ -92,7 +100,10 @@ export function LandingPage () {
                                 ta="center"
                                 p="xl"
                                 >
-                                <item.icon size={50}/>
+                                <item.icon style={{
+                                    height: 25,
+                                    width: 25
+                                }}/>
                                 <Title order={3}>{item.title}</Title>
                                 <Text>{item.body}</Text>
                             </Stack>
@@ -105,8 +116,10 @@ export function LandingPage () {
                 justify="center"
                 align="center"
                 p="xl"
+                w="100%"
+                ta="center"
                 >
-                <Title>Ready to Unleash Your Inner Keyboard Warrior?</Title>
+                <Title>Unleash Your Inner Keyboard Warrior</Title>
                 <Text
                     c="gray"
                     ta="center"
@@ -118,6 +131,7 @@ export function LandingPage () {
                 <TextInput
                     size="xl"
                     w={rem(400)}
+                    maw="90%"
                     placeholder="enter your email"
                     value={email}
                     onChange={(event) => setEmail(event.currentTarget.value)}
@@ -126,12 +140,15 @@ export function LandingPage () {
                     variant="light"
                     size="xl"
                     w={rem(400)}
+                    maw="90%"
+                    disabled={!checkEmail}
                     >
                     Sign Up for Rudeness
                 </Button>
                 <Text
                     size="sm"
                     fw="lighter"
+                    ta="center"
                     >
                     Don't worry, we won't email you. Unless you ask nicely.
                 </Text>
@@ -145,6 +162,7 @@ export function LandingPage () {
                 >
                 <Text
                     fw="lighter"
+                    ta="center"
                     >
                     © 2023 RudeMailer Inc. All rights reserved. Be nice to each other IRL.
                 </Text>
