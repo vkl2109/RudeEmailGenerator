@@ -1,4 +1,5 @@
 import { Group, rem, Title } from "@mantine/core";
+import { IconMail } from "@tabler/icons-react";
 
 
 export function RootHeader () {
@@ -9,7 +10,10 @@ export function RootHeader () {
             p="lg"
             h={rem(100)}
             >
-            <Title>Rude Email Generator</Title>
+            <Group>
+                <IconMail size={40}/>
+                <Title>RudeMailer</Title>
+            </Group>
         </Group>
     )
 }
