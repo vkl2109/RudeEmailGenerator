@@ -3,6 +3,7 @@ import {
 } from '@mantine/core';
 import { Outlet } from "react-router-dom";
 import { useHeadroom } from '@mantine/hooks';
+import { RootHeader } from './RootHeader';
 
 export function RootLayout () {
     const pinned = useHeadroom({ fixedAt: 100 });
@@ -16,6 +17,7 @@ export function RootLayout () {
             }}
             >
             <AppShell.Header>
+                <RootHeader />
             </AppShell.Header>
             <AppShell.Main pt={100}>
                 <Outlet />
