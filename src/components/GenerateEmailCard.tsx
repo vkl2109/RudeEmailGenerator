@@ -8,13 +8,18 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { useEmailTemplateStore, useTimelineStore } from "../zustand";
-
+import { useChosenTopicsStore, useEmailTemplateStore, useTimelineStore } from "../zustand";
+import { functions } from "../../firebase";
+import { httpsCallable } from "@firebase/functions";
+import { useState } from "react";
 
 export function GenerateEmailCard () {
 
     const updateTimeline = useTimelineStore((state) => state.updateTimeline)
     const updateTemplate = useEmailTemplateStore((state) => state.updateTemplate)
+    const chosenTopics = useChosenTopicsStore((state) => state.chosenTopics)
+
+    const [ loadingEmail, setLoadingEmail ] = useState(false)
 
     const form = useForm({
         initialValues: {
@@ -28,12 +33,27 @@ export function GenerateEmailCard () {
         }
     })
 
+    interface emailData {
+        success: boolean;
+        newEmail: {
+            body: string
+        }
+    }
+
     const handleSubmit = async (values: { to: string; from: string; }) => {
         try {
             console.log(values)
+            setLoadingEmail(true)
+            const generateEmail = httpsCallable(functions, 'generateEmail')
+            const emailResult = await generateEmail({
+                topics: chosenTopics
+            })
+            const newEmail = emailResult?.data as emailData
+            console.log(newEmail)
+            if (!newEmail.success) throw new Error ('failed to generate email')
             updateTemplate({
                 to: values.to,
-                body: '',
+                body: newEmail.newEmail.body,
                 from: values.from
             })
             updateTimeline(2)
@@ -44,6 +64,8 @@ export function GenerateEmailCard () {
                 title: 'Error',
                 message: 'Please Try Again'
             })
+        } finally {
+            setLoadingEmail(false)
         }
     }
 
@@ -78,6 +100,7 @@ export function GenerateEmailCard () {
                             variant="light"
                             type="submit"
                             size="md"
+                            loading={loadingEmail}
                             >
                             Generate
                         </Button>

@@ -17,9 +17,9 @@ import { useMemo } from "react";
 export function DisplayEmailCard () {
     const chosenTopics = useChosenTopicsStore((state) => state.chosenTopics)
     const [ to, body, from ] = useEmailTemplateStore((state) => [ state.to, state.body, state.from ])
+    const sendEmail = `Dear ${to},\n\n${body}\n\nInsincerely,\n${from}`;
 
-    const mailToLink = useMemo(() => {
-        const sendEmail = `Dear ${to},\n\n${body}\n\nInsincerely,\n${from}`;
+    const specialLink = useMemo(() => {
         const encodedBody = encodeURIComponent(sendEmail);
         const mailtoLink = `mailto:?body=${encodedBody}`;
         return mailtoLink;
@@ -74,7 +74,7 @@ export function DisplayEmailCard () {
                     justify="space-evenly"
                     align="center"
                     >
-                    <CopyButton value="https://mantine.dev">
+                    <CopyButton value={sendEmail}>
                         {({ copied, copy }) => (
                             <Tooltip label="copy" position="bottom">
                                 <ActionIcon 
@@ -95,7 +95,7 @@ export function DisplayEmailCard () {
                             size="xl"
                             variant="light"
                             component="a"
-                            href={mailToLink}
+                            href={specialLink}
                             >
                             <IconSend />
                         </ActionIcon>

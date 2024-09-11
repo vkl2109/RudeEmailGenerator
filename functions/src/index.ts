@@ -13,14 +13,6 @@ import { defineSecret } from "firebase-functions/params";
 import { ChatOpenAI } from "@langchain/openai";
 import { z } from "zod";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-
 const GPT_API_KEY = defineSecret('new-gpt-key')
 
 export const generateTopics = onCall(
@@ -30,22 +22,59 @@ export const generateTopics = onCall(
         const model = new ChatOpenAI({
             openAIApiKey: GPT_API_KEY.value(),
             model: "gpt-4o-mini",
-            temperature: 0,
+            temperature: 1.0,
         })
 
         const topics = z.object({
-            one: z.string().describe("A two word topic for a rude email"),
-            two: z.string().describe("A two word topic for a rude email"),
-            three: z.string().describe("A two word topic for a rude email"),
+            one: z.string().describe("A two word scenario for a rude email"),
+            two: z.string().describe("A two word scenario for a rude email"),
+            three: z.string().describe("A two word scenario for a rude email"),
         });
 
         const structuredLlm = model.withStructuredOutput(topics);
 
-        const result = await structuredLlm.invoke("Generate 3 two word topics for a rude email generator app")
+        const result = await structuredLlm.invoke("Generate 3 funny wacky quirky two word scenarios for a rude email generator app")
 
         return {
             success: true,
             newTopics: result
+        }
+    } catch (e) {
+        logger.warn(e)
+        throw new HttpsError("internal", "Failed to generate topics")
+    }
+})
+
+export const generateEmail = onCall(
+    { secrets: [GPT_API_KEY] }, 
+    async (request) => {
+    try {
+        const params = request.data
+        const topics = params?.topics
+
+        if (!topics || topics?.length == 0) {
+            throw new HttpsError("invalid-argument", "bad args passed")
+        }
+
+        const model = new ChatOpenAI({
+            openAIApiKey: GPT_API_KEY.value(),
+            model: "gpt-4o-mini",
+            temperature: 1.0,
+        })
+
+        const bodyFormat = z.object({
+            body: z.string().describe("The body of a rude but funny email")
+        })
+
+        const structuredLlm = model.withStructuredOutput(bodyFormat);
+
+        const stringTopics = topics.join(", ")
+
+        const result = await structuredLlm.invoke(`Generate ONLY the body of a rude but funny email (with no subject, to or from) based on these topics: ${stringTopics}`)
+
+        return {
+            success: true,
+            newEmail: result
         }
     } catch (e) {
         logger.warn(e)

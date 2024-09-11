@@ -30,7 +30,13 @@ export function EditEmailCard () {
                     >
                     <Text>Dear {to},</Text>
                 </Group>
-                <Text>{body}</Text>
+                <Text
+                    ta="start"
+                    style={{
+                        textIndent: 50
+                    }}
+                    >{body}
+                </Text>
                 <Group
                     w="100%"
                     justify="flex-end"
