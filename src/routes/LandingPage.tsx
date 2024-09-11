@@ -54,6 +54,7 @@ export function LandingPage () {
                 align="center"
                 p="xl"
                 m={0}
+                mih={rem(300)}
                 >
                 <Title
                     c="white"
