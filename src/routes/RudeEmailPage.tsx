@@ -2,6 +2,7 @@ import { Button, Card, Chip, Group, Stack, Text, Timeline, Title, rem } from "@m
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import { useTimelineStore } from "../zustand";
+import { TimelineCard } from "../components";
 
 
 export function RudeEmailPage () {
@@ -62,12 +63,6 @@ export function RudeEmailPage () {
                         <Text>Craft the perfect snarky, sarcastic, or downright rude email in seconds!</Text>
                     </Stack>
                 </Card>
-                <Card
-                    radius="xl"
-                    shadow="md"
-                    p="xl"
-                    w="100%"
-                    >
                     <Group
                         w="100%"
                         justify="space-evenly"
@@ -101,22 +96,8 @@ export function RudeEmailPage () {
                             }))
                             }
                         </Stack>
-                        <Timeline active={timeline}>
-                            <Timeline.Item title="Topics">
-                                <Text c="dimmed" size="sm">Choose some topics</Text>
-                                <Text size="xs" mt={4}></Text>
-                            </Timeline.Item>
-                            <Timeline.Item title="Email">
-                                <Text c="dimmed" size="sm">Generate the email</Text>
-                                <Text size="xs" mt={4}></Text>
-                            </Timeline.Item>
-                            <Timeline.Item title="Finalize">
-                                <Text c="dimmed" size="sm">Edit/Send</Text>
-                                <Text size="xs" mt={4}></Text>
-                            </Timeline.Item>
-                        </Timeline>
+                        <TimelineCard />
                     </Group>
-                </Card>
             </Stack>
         </Stack>
     )
