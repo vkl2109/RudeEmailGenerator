@@ -7,7 +7,7 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {onRequest} from "firebase-functions/v2/https";
+import { HttpsError, onCall } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 
 // Start writing functions
@@ -17,3 +17,13 @@ import * as logger from "firebase-functions/logger";
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+export const generateTopics = onCall(async (request) => {
+    try {
+        const params = request?.data
+        logger.log(params)
+    } catch (e) {
+        logger.warn(e)
+        throw new HttpsError("internal", "Failed to generate topics")
+    }
+})
