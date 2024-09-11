@@ -26,7 +26,7 @@ export function TopicsCard () {
     }
 
     const handleCheckTopic = (topic: string) => {
-        let newTopics = new Set(chosenTopics)
+        const newTopics = new Set(chosenTopics)
         if (chosenTopics.has(topic)) {
             newTopics.delete(topic)
         } else {
@@ -41,6 +41,7 @@ export function TopicsCard () {
             shadow="md"
             p="xl"
             h={rem(300)}
+            w={rem(250)}
             >
             <Stack 
                 justify="center"

@@ -17,6 +17,7 @@ export function TimelineCard () {
             shadow="md"
             p="xl"
             h={rem(300)}
+            w={rem(250)}
             >
             <Center
                 w="100%"
