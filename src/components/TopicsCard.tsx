@@ -1,5 +1,5 @@
 import { ActionIcon, Button, Card, Chip, Group, Stack, rem } from "@mantine/core";
-import { useTimelineStore } from "../zustand";
+import { useChosenTopicsStore, useTimelineStore } from "../zustand";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { IconArrowLeft, IconArrowRight, IconReload } from "@tabler/icons-react";
@@ -8,20 +8,29 @@ import { httpsCallable } from "firebase/functions";
 
 export function TopicsCard () {
     const updateTimeline = useTimelineStore((state) => state.updateTimeline )
+    const updateChosenTopics = useChosenTopicsStore((state) => state.updateChosenTopics)
     const [ loadingTopics, setLoadingTopics ] = useState<boolean>(false)
     const [ topics, setTopics ] = useState<string[]>([])
     const [ chosenTopics, setChosenTopics ] = useState<Set<string>>(new Set())
+
+    interface topicsData {
+        success: boolean;
+        newTopics: {
+            one: string;
+            two: string;
+            three: string;
+        };
+    }
 
     const generateTopics = async () => {
         try {
             setLoadingTopics(true)
             const generateTopics = httpsCallable(functions, 'generateTopics')
-            const newTopics = await generateTopics({
-                test: 'hello'
-            })
-            const results = newTopics.data
-            if (!results) throw new Error('failed')
-            console.log(results)
+            const topicsResult = await generateTopics()
+            const results = topicsResult.data as topicsData
+            if (!results?.success) throw new Error('failed')
+            const newTopicsData: string[] = Object.values(results?.newTopics)
+            setTopics(newTopicsData)
         } catch (e) {
             console.log(e)
             notifications.show({
@@ -35,6 +44,7 @@ export function TopicsCard () {
 
     const handleSubmit = async () => {
         try {
+            updateChosenTopics(Array.from(chosenTopics))
             updateTimeline(1)
         } catch (e) {
             console.log(e)
@@ -97,6 +107,9 @@ export function TopicsCard () {
                     </Group>
                     <Stack
                         w="100%"
+                        gap="md"
+                        justify="center"
+                        align="center"
                         >
                         {topics.map((topic, i) => {
                             return(
@@ -118,6 +131,7 @@ export function TopicsCard () {
                             variant="outline"
                             radius="xl"
                             size="xl"
+                            onClick={generateTopics}
                             >
                             <IconReload />
                         </ActionIcon>

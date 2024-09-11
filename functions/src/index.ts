@@ -34,14 +34,14 @@ export const generateTopics = onCall(
         })
 
         const topics = z.object({
-            one: z.string().describe("A topic for a rude email"),
-            two: z.string().describe("A topic for a rude email"),
-            three: z.string().describe("A topic for a rude email"),
+            one: z.string().describe("A two word topic for a rude email"),
+            two: z.string().describe("A two word topic for a rude email"),
+            three: z.string().describe("A two word topic for a rude email"),
         });
 
         const structuredLlm = model.withStructuredOutput(topics);
 
-        const result = await structuredLlm.invoke("Generate 3 topics for a rude email")
+        const result = await structuredLlm.invoke("Generate 3 two word topics for a rude email generator app")
 
         return {
             success: true,

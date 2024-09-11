@@ -12,6 +12,19 @@ const useTimelineStore = create<TimelineState>((set) => ({
     }))
 }))
 
+interface ChosenTopicsState {
+    chosenTopics: string[],
+    updateChosenTopics: (newChosenTopics: string[]) => void
+}
+
+const useChosenTopicsStore = create<ChosenTopicsState>((set) => ({
+    chosenTopics: [],
+    updateChosenTopics: (newChosenTopics: string[]) => set(() => ({
+        chosenTopics: newChosenTopics
+    }))
+}))
+
 export {
-    useTimelineStore
+    useTimelineStore,
+    useChosenTopicsStore
 }
