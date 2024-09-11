@@ -1,10 +1,11 @@
 import { Button, Card, Chip, Group, Stack, Text, Timeline, Title, rem } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
+import { useTimelineStore } from "../zustand";
 
 
 export function RudeEmailPage () {
-    const [ currentState, setCurrentState ] = useState<number>(0)
+    const [ timeline, updateTimeline ] = useTimelineStore((state) => [ state.timeline, state.updateTimeline ])
     const [ loadingTopics, setLoadingTopics ] = useState<boolean>(false)
     const [ topics, setTopics ] = useState<string[]>([])
     const [ chosenTopics, setChosenTopics ] = useState<Set<string>>(new Set())
@@ -13,7 +14,7 @@ export function RudeEmailPage () {
         try {
             setLoadingTopics(true)
             setTopics(['one','two', 'three'])
-            setCurrentState(1)
+            updateTimeline(1)
         } catch (e) {
             console.log(e)
             notifications.show({
@@ -100,7 +101,7 @@ export function RudeEmailPage () {
                             }))
                             }
                         </Stack>
-                        <Timeline active={currentState}>
+                        <Timeline active={timeline}>
                             <Timeline.Item title="Topics">
                                 <Text c="dimmed" size="sm">Choose some topics</Text>
                                 <Text size="xs" mt={4}></Text>
