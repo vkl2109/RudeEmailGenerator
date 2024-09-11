@@ -7,6 +7,8 @@ import {
     rem 
 } from "@mantine/core";
 import { 
+    DisplayEmailCard,
+    EditEmailCard,
     GenerateEmailCard,
     TimelineCard, 
     TopicsCard
@@ -24,6 +26,8 @@ export function RudeEmailPage () {
                 return <TopicsCard />
             case 1:
                 return <GenerateEmailCard />
+            case 2:
+                return <DisplayEmailCard />
         }
     },[timeline])
 
@@ -53,14 +57,15 @@ export function RudeEmailPage () {
                         <Text>Craft the perfect snarky, sarcastic, or downright rude email in seconds!</Text>
                     </Stack>
                 </Card>
-                    <Group
-                        w="100%"
-                        justify="space-evenly"
-                        align="center"
-                        >
-                        <StateRenderer />
-                        <TimelineCard />
-                    </Group>
+                {timeline == 2 && <EditEmailCard />}
+                <Group
+                    w="100%"
+                    justify="space-evenly"
+                    align="center"
+                    >
+                    <StateRenderer />
+                    <TimelineCard />
+                </Group>
             </Stack>
         </Stack>
     )

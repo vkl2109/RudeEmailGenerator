@@ -24,7 +24,27 @@ const useChosenTopicsStore = create<ChosenTopicsState>((set) => ({
     }))
 }))
 
+interface emailTemplateState {
+    to: string,
+    from: string,
+    body: string,
+    updateTemplate: (newTemplate: {to: string; body: string; from: string}) => void
+}
+
+const useEmailTemplateStore = create<emailTemplateState>((set) => ({
+    to: '',
+    body: '',
+    from: '',
+    updateTemplate: (newTemplate: {to: string; body: string; from: string}) => set(() => ({
+        to: newTemplate?.to,
+        body: newTemplate?.body,
+        from: newTemplate?.from
+    }))
+}))
+
+
 export {
     useTimelineStore,
-    useChosenTopicsStore
+    useChosenTopicsStore,
+    useEmailTemplateStore
 }

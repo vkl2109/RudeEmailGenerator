@@ -7,12 +7,18 @@ import {
     Timeline, 
     rem 
 } from "@mantine/core";
-import { useTimelineStore } from "../zustand";
+import { useChosenTopicsStore, useTimelineStore } from "../zustand";
 import { IconArrowBackUp, IconRefresh } from "@tabler/icons-react";
 
 
 export function TimelineCard () {
     const [ timeline, updateTimeline ] = useTimelineStore((state) => [ state.timeline, state.updateTimeline])
+    const updateChosenTopics = useChosenTopicsStore((state) => state.updateChosenTopics)
+
+    const handleReset = () => {
+        updateTimeline(0)
+        updateChosenTopics([])
+    }
 
     return(
         <Card
@@ -60,7 +66,7 @@ export function TimelineCard () {
                         variant="light"
                         size="xl"
                         radius="xl"
-                        onClick={() => updateTimeline(0)}
+                        onClick={handleReset}
                         >
                         <IconRefresh />
                     </ActionIcon>

@@ -8,12 +8,13 @@ import {
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { useTimelineStore } from "../zustand";
+import { useEmailTemplateStore, useTimelineStore } from "../zustand";
 
 
 export function GenerateEmailCard () {
 
     const updateTimeline = useTimelineStore((state) => state.updateTimeline)
+    const updateTemplate = useEmailTemplateStore((state) => state.updateTemplate)
 
     const form = useForm({
         initialValues: {
@@ -30,7 +31,13 @@ export function GenerateEmailCard () {
     const handleSubmit = async (values: { to: string; from: string; }) => {
         try {
             console.log(values)
+            updateTemplate({
+                to: values.to,
+                body: '',
+                from: values.from
+            })
             updateTimeline(2)
+            form.reset()
         } catch (e) {
             console.log(e)
             notifications.show({
