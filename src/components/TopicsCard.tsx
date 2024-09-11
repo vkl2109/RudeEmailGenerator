@@ -3,6 +3,8 @@ import { useTimelineStore } from "../zustand";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { IconArrowLeft, IconArrowRight, IconReload } from "@tabler/icons-react";
+import { functions } from '../../firebase'
+import { httpsCallable } from "firebase/functions";
 
 export function TopicsCard () {
     const updateTimeline = useTimelineStore((state) => state.updateTimeline )
@@ -13,7 +15,13 @@ export function TopicsCard () {
     const generateTopics = async () => {
         try {
             setLoadingTopics(true)
-            setTopics(['one','two', 'three'])
+            const generateTopics = httpsCallable(functions, 'generateTopics')
+            const newTopics = await generateTopics({
+                test: 'hello'
+            })
+            const results = newTopics.data
+            if (!results) throw new Error('failed')
+            console.log(results)
         } catch (e) {
             console.log(e)
             notifications.show({
