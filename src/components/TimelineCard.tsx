@@ -1,15 +1,18 @@
 import { 
+    ActionIcon,
     Card, 
-    Center, 
+    Group, 
+    Stack, 
     Text, 
     Timeline, 
     rem 
 } from "@mantine/core";
 import { useTimelineStore } from "../zustand";
+import { IconArrowBackUp, IconRefresh } from "@tabler/icons-react";
 
 
 export function TimelineCard () {
-    const timeline = useTimelineStore((state) => state.timeline)
+    const [ timeline, updateTimeline ] = useTimelineStore((state) => [ state.timeline, state.updateTimeline])
 
     return(
         <Card
@@ -19,9 +22,11 @@ export function TimelineCard () {
             h={rem(300)}
             w={rem(250)}
             >
-            <Center
+            <Stack
                 w="100%"
                 h="100%"
+                justify="center"
+                align="center"
                 >
                 <Timeline active={timeline}>
                     <Timeline.Item title="Topics">
@@ -37,7 +42,31 @@ export function TimelineCard () {
                         <Text size="xs" mt={4}></Text>
                     </Timeline.Item>
                 </Timeline>
-            </Center>
+                {timeline > 0 &&
+                <Group
+                    w="100%"
+                    justify="space-evenly"
+                    align="center"
+                    >
+                    <ActionIcon
+                        variant="outline"
+                        size="xl"
+                        radius="xl"
+                        onClick={() => updateTimeline(timeline - 1)}
+                        >
+                        <IconArrowBackUp />
+                    </ActionIcon>
+                    <ActionIcon
+                        variant="light"
+                        size="xl"
+                        radius="xl"
+                        onClick={() => updateTimeline(0)}
+                        >
+                        <IconRefresh />
+                    </ActionIcon>
+                </Group>
+                }
+            </Stack>
         </Card>
     )
 }

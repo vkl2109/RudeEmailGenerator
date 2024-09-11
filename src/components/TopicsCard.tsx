@@ -1,7 +1,8 @@
-import { Button, Card, Chip, Stack, rem } from "@mantine/core";
+import { ActionIcon, Button, Card, Chip, Group, Stack, rem } from "@mantine/core";
 import { useTimelineStore } from "../zustand";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
+import { IconArrowLeft, IconArrowRight, IconReload } from "@tabler/icons-react";
 
 export function TopicsCard () {
     const updateTimeline = useTimelineStore((state) => state.updateTimeline )
@@ -13,7 +14,6 @@ export function TopicsCard () {
         try {
             setLoadingTopics(true)
             setTopics(['one','two', 'three'])
-            updateTimeline(1)
         } catch (e) {
             console.log(e)
             notifications.show({
@@ -22,6 +22,18 @@ export function TopicsCard () {
             })
         } finally {
             setLoadingTopics(false)
+        }
+    }
+
+    const handleSubmit = async () => {
+        try {
+            updateTimeline(1)
+        } catch (e) {
+            console.log(e)
+            notifications.show({
+                title: 'Oops!',
+                message: 'Please Try Again'
+            })
         }
     }
 
@@ -60,17 +72,58 @@ export function TopicsCard () {
                     Generate Topics
                 </Button>
                 :
-                (topics.map((topic, i) => {
-                    return(
-                        <Chip
-                        key={i}
-                        checked={chosenTopics.has(topic)}
-                        onClick={() => handleCheckTopic(topic)}
+                <Stack
+                    w="100%"
+                    h="100%"
+                    justify="space-between"
+                    >
+                    <Group
+                        
                         >
-                            {topic}
-                        </Chip>
-                    )
-                }))
+                        <ActionIcon
+                            variant="transparent"
+                            onClick={() => setTopics([])}
+                            >
+                            <IconArrowLeft />
+                        </ActionIcon>                        
+                    </Group>
+                    <Stack
+                        w="100%"
+                        >
+                        {topics.map((topic, i) => {
+                            return(
+                                <Chip
+                                key={i}
+                                checked={chosenTopics.has(topic)}
+                                onClick={() => handleCheckTopic(topic)}
+                                >
+                                    {topic}
+                                </Chip>
+                            )
+                        })}
+                    </Stack>
+                    <Group
+                        w="100%"
+                        justify="space-between"
+                        >
+                        <ActionIcon
+                            variant="outline"
+                            radius="xl"
+                            size="xl"
+                            >
+                            <IconReload />
+                        </ActionIcon>
+                        <ActionIcon
+                            variant="light"
+                            disabled={chosenTopics.size == 0}
+                            radius="xl"
+                            size="xl"
+                            onClick={handleSubmit}
+                            >
+                            <IconArrowRight />
+                        </ActionIcon>
+                    </Group>
+                </Stack>
                 }
             </Stack>
         </Card>

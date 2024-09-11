@@ -7,11 +7,25 @@ import {
     rem 
 } from "@mantine/core";
 import { 
+    GenerateEmailCard,
     TimelineCard, 
     TopicsCard
 } from "../components";
+import { useCallback } from "react";
+import { useTimelineStore } from "../zustand";
 
 export function RudeEmailPage () {
+
+    const timeline = useTimelineStore((state) => state.timeline)
+
+    const StateRenderer = useCallback(() => {
+        switch (timeline) {
+            case 0:
+                return <TopicsCard />
+            case 1:
+                return <GenerateEmailCard />
+        }
+    },[timeline])
 
     return(
         <Stack
@@ -44,7 +58,7 @@ export function RudeEmailPage () {
                         justify="space-evenly"
                         align="center"
                         >
-                        <TopicsCard />
+                        <StateRenderer />
                         <TimelineCard />
                     </Group>
             </Stack>
