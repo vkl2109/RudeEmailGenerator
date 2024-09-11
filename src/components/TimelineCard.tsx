@@ -5,6 +5,7 @@ import {
     Stack, 
     Text, 
     Timeline, 
+    Tooltip, 
     rem 
 } from "@mantine/core";
 import { useChosenTopicsStore, useTimelineStore } from "../zustand";
@@ -54,22 +55,26 @@ export function TimelineCard () {
                     justify="space-evenly"
                     align="center"
                     >
-                    <ActionIcon
-                        variant="outline"
-                        size="xl"
-                        radius="xl"
-                        onClick={() => updateTimeline(timeline - 1)}
-                        >
-                        <IconArrowBackUp />
-                    </ActionIcon>
-                    <ActionIcon
-                        variant="light"
-                        size="xl"
-                        radius="xl"
-                        onClick={handleReset}
-                        >
-                        <IconRefresh />
-                    </ActionIcon>
+                    <Tooltip label="back" position="bottom">
+                        <ActionIcon
+                            variant="outline"
+                            size="xl"
+                            radius="xl"
+                            onClick={() => updateTimeline(timeline - 1)}
+                            >
+                            <IconArrowBackUp />
+                        </ActionIcon>
+                    </Tooltip>
+                    <Tooltip label="reset" position="bottom">
+                        <ActionIcon
+                            variant="light"
+                            size="xl"
+                            radius="xl"
+                            onClick={handleReset}
+                            >
+                            <IconRefresh />
+                        </ActionIcon>
+                    </Tooltip>
                 </Group>
                 }
             </Stack>

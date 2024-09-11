@@ -2,8 +2,7 @@ import {
     Card, 
     Group, 
     Stack, 
-    Text, 
-    rem
+    Text
 } from "@mantine/core";
 import { useEmailTemplateStore } from "../zustand";
 
@@ -16,9 +15,7 @@ export function EditEmailCard () {
             radius="xl"
             shadow="md"
             p="xl"
-            h={rem(300)}
-            w={rem(250)}
-            maw={'90%'}
+            w={"100%"}
             >
             <Stack
                 h="100%"
@@ -39,7 +36,10 @@ export function EditEmailCard () {
                     justify="flex-end"
                     align="center"
                     >
-                    <Text>Insincerely, {from}</Text>
+                    <Stack gap={0} align="flex-end">
+                        <Text>Insincerely, </Text>
+                        <Text>{from}</Text>
+                    </Stack>
                 </Group>
             </Stack>
         </Card>

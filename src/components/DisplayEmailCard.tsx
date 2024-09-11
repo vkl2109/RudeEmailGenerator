@@ -2,19 +2,28 @@ import {
     ActionIcon,
     Badge,
     Card, 
+    CopyButton, 
     Group, 
     Stack, 
     Text, 
     Title, 
+    Tooltip, 
     rem
 } from "@mantine/core";
 import { useChosenTopicsStore, useEmailTemplateStore } from "../zustand";
-import { IconDownload, IconShare2 } from "@tabler/icons-react";
-
+import { IconCheck, IconCopy, IconSend } from "@tabler/icons-react";
+import { useMemo } from "react";
 
 export function DisplayEmailCard () {
     const chosenTopics = useChosenTopicsStore((state) => state.chosenTopics)
-    const [ to, from ] = useEmailTemplateStore((state) => [ state.to, state.from ])
+    const [ to, body, from ] = useEmailTemplateStore((state) => [ state.to, state.body, state.from ])
+
+    const mailToLink = useMemo(() => {
+        const sendEmail = `Dear ${to},\n\n${body}\n\nInsincerely,\n${from}`;
+        const encodedBody = encodeURIComponent(sendEmail);
+        const mailtoLink = `mailto:?body=${encodedBody}`;
+        return mailtoLink;
+    },[to, body, from])
 
     return(
         <Card
@@ -65,20 +74,32 @@ export function DisplayEmailCard () {
                     justify="space-evenly"
                     align="center"
                     >
-                    <ActionIcon
-                        radius="md"
-                        size="xl"
-                        variant="light"
-                        >
-                        <IconShare2 />
-                    </ActionIcon>
-                    <ActionIcon
-                        radius="md"
-                        size="xl"
-                        variant="light"
-                        >
-                        <IconDownload />
-                    </ActionIcon>
+                    <CopyButton value="https://mantine.dev">
+                        {({ copied, copy }) => (
+                            <Tooltip label="copy" position="bottom">
+                                <ActionIcon 
+                                    color={copied ? 'teal' : 'blue'} 
+                                    onClick={copy}
+                                    radius="xl"
+                                    size="xl"
+                                    variant="outline"
+                                    >
+                                    {copied ? <IconCheck /> : <IconCopy />}
+                                </ActionIcon>
+                            </Tooltip>
+                        )}
+                    </CopyButton>
+                    <Tooltip label="send" position="bottom">
+                        <ActionIcon
+                            radius="xl"
+                            size="xl"
+                            variant="light"
+                            component="a"
+                            href={mailToLink}
+                            >
+                            <IconSend />
+                        </ActionIcon>
+                    </Tooltip>
                 </Group>
             </Stack>
         </Card>
