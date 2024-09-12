@@ -63,14 +63,14 @@ export const generateEmail = onCall(
         })
 
         const bodyFormat = z.object({
-            body: z.string().describe("The body of a rude but funny email")
+            body: z.string().describe("A paragraph of a rude snarky sarcastic email")
         })
 
         const structuredLlm = model.withStructuredOutput(bodyFormat);
 
         const stringTopics = topics.join(", ")
 
-        const result = await structuredLlm.invoke(`Generate ONLY the body of a rude but funny email (with no subject, to or from) based on these topics: ${stringTopics}`)
+        const result = await structuredLlm.invoke(`Generate ONLY a paragraph of a rude snarky sarcastic email (with NO subject, NO salutation greeting and NO email sign off) based on these topics: ${stringTopics}`)
 
         return {
             success: true,
