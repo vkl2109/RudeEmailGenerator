@@ -45,7 +45,7 @@ export function TimelineCard () {
                         <Text size="xs" mt={4}></Text>
                     </Timeline.Item>
                     <Timeline.Item title="Finalize">
-                        <Text c="dimmed" size="sm">Edit/Send</Text>
+                        <Text c="dimmed" size="sm">Copy/Send</Text>
                         <Text size="xs" mt={4}></Text>
                     </Timeline.Item>
                 </Timeline>
